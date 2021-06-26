@@ -58,7 +58,7 @@ import (
 func init() {
 	fs.Register(&fs.RegInfo{
 		Name:        "s3",
-		Description: "Amazon S3 Compliant Storage Providers including AWS, Alibaba, Ceph, Digital Ocean, Dreamhost, IBM COS, Minio, SeaweedFS, and Tencent COS",
+		Description: "Amazon S3 Compliant Storage Providers including AWS, Alibaba, Ceph, RackCorp, Digital Ocean, Dreamhost, IBM COS, Minio, SeaweedFS, and Tencent COS",
 		NewFs:       NewFs,
 		CommandHelp: commandHelp,
 		Options: []fs.Option{{
@@ -73,6 +73,9 @@ func init() {
 			}, {
 				Value: "Ceph",
 				Help:  "Ceph Object Storage",
+			}, {
+				Value: "RackCorp",
+				Help:  "RackCorp Object Storage",
 			}, {
 				Value: "DigitalOcean",
 				Help:  "Digital Ocean Spaces",
@@ -220,8 +223,67 @@ func init() {
 			}},
 		}, {
 			Name:     "region",
+			Help:     "Region to connect to for RackCorp Object Storage.",
+			Provider: "RackCorp",
+			Examples: []fs.OptionExample{{
+				Value: "au",
+				Help:  "Australia",
+		}, {
+				Value: "au-nsw",
+				Help:  "Australia, Sydney (NSW)",
+		}, {
+				Value: "au-nsw-gbl1",
+				Help:  "Australia, Sydney (GlobalSwitch)",
+		}, {
+				Value: "au-nsw-eqx4",
+				Help:  "Australia, Sydney (Equinix SY4)",
+		}, {
+				Value: "au-vic",
+				Help:  "Australia, Melbourne (VIC)",
+		}, {
+				Value: "au-qld",
+				Help:  "Australia, Brisbane (QLD)",
+		}, {
+				Value: "au-wa",
+				Help:  "Australia, Perth (WA)",
+		}, {
+				Value: "th",
+				Help:  "Thailand",
+		}, {
+				Value: "th-bkk1",
+				Help:  "Thailand, Bangkok (Bang Na)",
+		}, {
+				Value: "th-bkk2",
+				Help:  "Thailand, Bangkok (Chonburi)",
+		}, {
+				Value: "mn",
+				Help:  "Mongolia",
+		}, {
+				Value: "mn-gem1",
+				Help:  "Mongolia, Ulaanbaatar (Gemnet DC)",
+		}, {
+				Value: "mn-gdc1",
+				Help:  "Mongolia, Ulaanbaatar (Gov DC)",
+		}, {
+				Value: "hk",
+				Help:  "HongKong",
+		}, {
+				Value: "hk-eqx2",
+				Help:  "HongKong (Equinix HK2)",
+		}, {
+				Value: "ph",
+				Help:  "Philippines",
+		}, {
+				Value: "ph-crm1",
+				Help:  "Philippines (Carmona)",
+		}, {
+				Value: "ph-mkt1",
+				Help:  "Philippines, Manila (Makati)",
+			}},
+		}, {
+			Name:     "region",
 			Help:     "Region to connect to.\nLeave blank if you are using an S3 clone and you don't have a region.",
-			Provider: "!AWS,Alibaba,Scaleway,TencentCOS",
+			Provider: "!AWS,!RackCorp,Alibaba,Scaleway,TencentCOS",
 			Examples: []fs.OptionExample{{
 				Value: "",
 				Help:  "Use this if unsure. Will use v4 signatures and an empty region.",
@@ -577,8 +639,67 @@ func init() {
 			}},
 		}, {
 			Name:     "endpoint",
+			Help:     "Endpoint(s) for accessing RackCorp Object Storage.",
+			Provider: "RackCorp",
+			Examples: []fs.OptionExample{{
+				Value: "s3.rackcorp.com",
+				Help:  "AnyCast Global Endpoint",
+			}, {
+				Value: "au.s3.rackcorp.com",
+				Help:  "Any Australian Endpoint",
+			}, {
+				Value: "au-nsw.s3.rackcorp.com",
+				Help:  "Australia, Sydney (NSW) Endpoint",
+			}, {
+				Value: "au-nsw-gbl1.s3.rackcorp.com",
+				Help:  "Australia, Sydney (GlobalSwitch) Endpoint",
+			}, {
+				Value: "au-nsw-eqx4.s3.rackcorp.com",
+				Help:  "Australia, Sydney (Equinix SY4) Endpoint",
+			}, {
+				Value: "au-vic.s3.rackcorp.com",
+				Help:  "Australia, Victoria Endpoint",
+			}, {
+				Value: "au-qld.s3.rackcorp.com",
+				Help:  "Australia, Brisbane Endpoint",
+			}, {
+				Value: "au-wa.s3.rackcorp.com",
+				Help:  "Australia, Perth Endpoint",
+			}, {
+				Value: "th.s3.rackcorp.com",
+				Help:  "Thailand Endpoint",
+			}, {
+				Value: "th-bkk1.s3.rackcorp.com",
+				Help:  "Thailand, Bangkok (Bang Na) Endpoint",
+			}, {
+				Value: "th-bkk2.s3.rackcorp.com",
+				Help:  "Thailand, Bangkok (Chonburi) Endpoint",
+			}, {
+				Value: "mn.s3.rackcorp.com",
+				Help:  "Mongolia Endpoint",
+			}, {
+				Value: "mn-gem1.s3.rackcorp.com",
+				Help:  "Mongolia, Ulaanbaatar (Gemnet DC) Endpoint",
+			}, {
+				Value: "mn-gdc1.s3.rackcorp.com",
+				Help:  "Mongolia, Ulaanbaatar (Gov DC) Endpoint",
+			}, {
+				Value: "hk.s3.rackcorp.com",
+				Help:  "Hongkong Endpoint",
+			}, {
+				Value: "ph.s3.rackcorp.com",
+				Help:  "Philippines Endpoint",
+			}, {
+				Value: "ph-crm1.s3.rackcorp.com",
+				Help:  "Philippines (Carmona) Endpoint",
+			}, {
+				Value: "ph-mak1.s3.rackcorp.com",
+				Help:  "Philippines, Manila (Makati) Endpoint",
+			}},
+		}, {
+			Name:     "endpoint",
 			Help:     "Endpoint for S3 API.\nRequired when using an S3 clone.",
-			Provider: "!AWS,IBMCOS,TencentCOS,Alibaba,Scaleway,StackPath",
+			Provider: "!AWS,!RackCorp,IBMCOS,TencentCOS,Alibaba,Scaleway,StackPath",
 			Examples: []fs.OptionExample{{
 				Value:    "objects-us-east-1.dream.io",
 				Help:     "Dream Objects endpoint",
@@ -613,6 +734,68 @@ func init() {
 				Provider: "Wasabi",
 			}},
 		}, {
+			Name:     "location_constraint",
+			Help:     "Location constraint - must be set to match the Region.\nUsed when creating buckets only.",
+			Provider: "RackCorp",
+			Examples: []fs.OptionExample{{
+				Value: "au",
+				Help:  "Australia",
+		}, {
+				Value: "au-nsw",
+				Help:  "Australia, Sydney (NSW)",
+		}, {
+				Value: "au-nsw-gbl1",
+				Help:  "Australia, Sydney (GlobalSwitch)",
+		}, {
+				Value: "au-nsw-eqx4",
+				Help:  "Australia, Sydney (Equinix SY4)",
+		}, {
+				Value: "au-vic",
+				Help:  "Australia, Melbourne (VIC)",
+		}, {
+				Value: "au-qld",
+				Help:  "Australia, Brisbane (QLD)",
+		}, {
+				Value: "au-wa",
+				Help:  "Australia, Perth (WA)",
+		}, {
+				Value: "th",
+				Help:  "Thailand",
+		}, {
+				Value: "th-bkk1",
+				Help:  "Thailand, Bangkok (Bang Na)",
+		}, {
+				Value: "th-bkk2",
+				Help:  "Thailand, Bangkok (Chonburi)",
+		}, {
+				Value: "mn",
+				Help:  "Mongolia",
+		}, {
+				Value: "mn-gem1",
+				Help:  "Mongolia, Ulaanbaatar (Gemnet DC)",
+		}, {
+				Value: "mn-gdc1",
+				Help:  "Mongolia, Ulaanbaatar (Gov DC)",
+		}, {
+				Value: "hk",
+				Help:  "HongKong",
+		}, {
+				Value: "hk-eqx2",
+				Help:  "HongKong (Equinix HK2)",
+		}, {
+				Value: "ph",
+				Help:  "Philippines",
+		}, {
+				Value: "ph-crm1",
+				Help:  "Philippines (Carmona)",
+		}, {
+				Value: "ph-mkt1",
+				Help:  "Philippines, Manila (Makati)",
+			}},
+					
+
+		}, {
+
 			Name:     "location_constraint",
 			Help:     "Location constraint - must be set to match the Region.\nUsed when creating buckets only.",
 			Provider: "AWS",
@@ -883,7 +1066,7 @@ isn't set then "acl" is used instead.`,
 		}, {
 			Name:     "server_side_encryption",
 			Help:     "The server-side encryption algorithm used when storing this object in S3.",
-			Provider: "AWS,Ceph,Minio",
+			Provider: "AWS,Ceph,Minio,RackCorp",
 			Examples: []fs.OptionExample{{
 				Value: "",
 				Help:  "None",
@@ -897,7 +1080,7 @@ isn't set then "acl" is used instead.`,
 		}, {
 			Name:     "sse_customer_algorithm",
 			Help:     "If using SSE-C, the server-side encryption algorithm used when storing this object in S3.",
-			Provider: "AWS,Ceph,Minio",
+			Provider: "AWS,Ceph,Minio,RackCorp",
 			Advanced: true,
 			Examples: []fs.OptionExample{{
 				Value: "",
@@ -920,7 +1103,7 @@ isn't set then "acl" is used instead.`,
 		}, {
 			Name:     "sse_customer_key",
 			Help:     "If using SSE-C you must provide the secret encryption key used to encrypt/decrypt your data.",
-			Provider: "AWS,Ceph,Minio",
+			Provider: "AWS,Ceph,Minio,RackCorp",
 			Advanced: true,
 			Examples: []fs.OptionExample{{
 				Value: "",
@@ -932,7 +1115,7 @@ isn't set then "acl" is used instead.`,
 
 If you leave it blank, this is calculated automatically from the sse_customer_key provided.
 `,
-			Provider: "AWS,Ceph,Minio",
+			Provider: "AWS,Ceph,Minio,RackCorp",
 			Advanced: true,
 			Examples: []fs.OptionExample{{
 				Value: "",
@@ -1833,7 +2016,7 @@ func (f *Fs) list(ctx context.Context, bucket, directory, prefix string, addBuck
 	//
 	// So we enable only on providers we know supports it properly, all others can retry when a
 	// XML Syntax error is detected.
-	var urlEncodeListings = (f.opt.Provider == "AWS" || f.opt.Provider == "Wasabi" || f.opt.Provider == "Alibaba" || f.opt.Provider == "Minio" || f.opt.Provider == "TencentCOS")
+	var urlEncodeListings = (f.opt.Provider == "AWS" || f.opt.Provider == "Wasabi" || f.opt.Provider == "Alibaba" || f.opt.Provider == "Minio" || f.opt.Provider == "TencentCOS" || f.opt.Provider == "RackCorp")
 	for {
 		// FIXME need to implement ALL loop
 		req := s3.ListObjectsInput{
